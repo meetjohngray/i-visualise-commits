@@ -60,7 +60,7 @@
 	});
 </script>
 
-<div>
+<div class="flex flex-col gap-10 w-2/3">
 	<ListStudents data={tableData} />
 	<PivotCommits
 		pivotTable={pivotReposStudents}

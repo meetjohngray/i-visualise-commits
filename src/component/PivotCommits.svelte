@@ -3,21 +3,21 @@
 	export let studentNames;
 </script>
 
-<table>
+<table class="table-auto border-collapse border border-slate-500">
 	<thead>
 		<tr>
 			<th>Date/Student</th>
 			{#each studentNames as name (name)}
-				<th>{name}</th>
+				<th class="border border-slate-600">{name}</th>
 			{/each}
 		</tr>
 	</thead>
 	<tbody>
 		{#each Object.entries(pivotTable) as [date, commitsByStudent] (date)}
 			<tr>
-				<td title="test">{date}</td>
+				<td class="border border-slate-600">{date}</td>
 				{#each studentNames as studentName (studentName)}
-					<td>{commitsByStudent[studentName] || 0}</td>
+					<td  class="border border-slate-600">{commitsByStudent[studentName] || 0}</td>
 				{/each}
 			</tr>
 		{/each}
