@@ -15,9 +15,9 @@
 	<tbody>
 		{#each Object.entries(pivotTable) as [date, commitsByStudent] (date)}
 			<tr>
-				<td class="border border-slate-600">{date}</td>
+				<td class="border border-slate-600 text-right">{date}</td>
 				{#each studentNames as studentName (studentName)}
-					<td  class="border border-slate-600">{commitsByStudent[studentName] || 0}</td>
+					<td  class="border border-slate-600 text-center">{commitsByStudent[studentName] || 0}</td>
 				{/each}
 			</tr>
 		{/each}
