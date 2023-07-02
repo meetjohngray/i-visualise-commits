@@ -46,14 +46,14 @@ function formatTimeAgo(date) {
 	<tbody>
 		{#each data as student}
 			<tr>
-				<td class="text-right">{student.name}</td>
+				<td class="text-right pl-4">{student.name}</td>
 				<td class="text-right">
 					<span>{student.totalCommits}</span>
 				</td>
 				<td class="px-4 text-right">
 					<span>{isNaN(student.progressScore) ? 0: student.progressScore.toFixed(0) }</span>
 				</td>
-				<td class="text-right" title={mediumTime.format(student.lastCommitDate)}>{formatTimeAgo(student.lastCommitDate)}</td>
+				<td class="text-right pr-4" title={mediumTime.format(student.lastCommitDate)}>{formatTimeAgo(student.lastCommitDate)}</td>
 			</tr>
 		{/each}
 	</tbody>
