@@ -36,7 +36,7 @@
   const pivotReposStudents: { [repo: string]: { [student: string]: number } } =
     {}
 
-  data.commits.forEach((commit) => {
+  data.streamed.commits.forEach((commit) => {
     const repoName = commit.Repo.name
     const studentName = commit.Student.name
 
@@ -51,7 +51,7 @@
 
   const pivotDaysStudents: { [date: string]: { [student: string]: number } } =
     {}
-  data.commits.forEach((commit) => {
+  data.streamed.commits.forEach((commit) => {
     const date = commit.created_on.toISOString().split('T')[0] // extract the date part
     const studentName = commit.Student.name
 
@@ -65,6 +65,10 @@
   })
 </script>
 
+
+{#await data.streamed.commits}
+<p>Loadding...</p>
+{:then commits}
 <div class="flex flex-col gap-10 w-2/3 items-center justify-center mx-auto">
   <ListStudents
     data={tableData.sort((a, b) => b.lastCommitDate - a.lastCommitDate)}
@@ -78,3 +82,4 @@
     studentNames={[...new Set(data.students.map((s) => s.name))]}
   />
 </div>
+{/await}

@@ -39,7 +39,9 @@ export async function load() {
 		}
 	})
 	return {
-		commits,
-		students
+		students,
+		streamed: {
+			commits
+		}
 	}
 }
