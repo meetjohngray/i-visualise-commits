@@ -32,8 +32,9 @@ function formatTimeAgo(date) {
   }
 }
 </script>
-
+	
 <table class="table-auto border-collapse border border-slate-500">
+	<caption>A list of all students in the cohort</caption>
 	<thead>
 		<tr class="bg-slate-800">
 			<th class="p-4">Name</th>
@@ -46,10 +47,15 @@ function formatTimeAgo(date) {
 		{#each data as student}
 			<tr>
 				<td class="text-right">{student.name}</td>
-				<td class="text-center">{student.totalCommits}</td>
-				<td class="text-center">{isNaN(student.progressScore) ? 0: student.progressScore.toFixed(1) }</td>
-				<td class="text-center" title={mediumTime.format(student.lastCommitDate)}>{formatTimeAgo(student.lastCommitDate)}</td>
+				<td class="text-right">
+					<span>{student.totalCommits}</span>
+				</td>
+				<td class="px-4 text-right">
+					<span>{isNaN(student.progressScore) ? 0: student.progressScore.toFixed(0) }</span>
+				</td>
+				<td class="text-right" title={mediumTime.format(student.lastCommitDate)}>{formatTimeAgo(student.lastCommitDate)}</td>
 			</tr>
 		{/each}
 	</tbody>
 </table>
+
