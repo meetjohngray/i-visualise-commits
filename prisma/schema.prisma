@@ -29,3 +29,10 @@ model Student {
   is_student Boolean
   Commit     Commit[]
 }
+
+model Log {
+  id         String   @id @default(uuid())
+  created_on DateTime @default(now())
+
+  error String
+}
