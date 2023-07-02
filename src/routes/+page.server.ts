@@ -1,7 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import pkg from '@prisma/client'
+const { PrismaClient } = pkg
 
 export async function load() {
-	const prisma = new PrismaClient();
+	const prisma = new PrismaClient()
 	const commits = await prisma.commit.findMany({
 		select: {
 			id: true,
@@ -26,7 +27,7 @@ export async function load() {
 		orderBy: {
 			created_on: 'desc'
 		}
-	});
+	})
 
 	const students = await prisma.student.findMany({
 		include: {
@@ -36,9 +37,9 @@ export async function load() {
 				}
 			}
 		}
-	});
+	})
 	return {
 		commits,
 		students
-	};
+	}
 }
