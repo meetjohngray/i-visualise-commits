@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"start": "node build",
 		"dev": "run-p dev:*",
 		"dev:client": "vite dev",
 		"dev:css": "tailwind -i ./src/input.css -o ./src/global.css --watch",
