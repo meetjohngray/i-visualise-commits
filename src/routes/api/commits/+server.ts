@@ -18,7 +18,7 @@ const schema = z.object({
     z.object({
       id: z.string(),
       timestamp: z.string(),
-      committer: z.object({
+      author: z.object({
         name: z.string(),
         email: z.string(),
         username: z.string()
@@ -50,16 +50,16 @@ export async function POST({ request }: RequestEvent) {
     for (const commit of payload.commits) {
       await prisma.student.upsert({
         where: {
-          email: commit.committer.email
+          email: commit.author.email
         },
         update: {
-          name: commit.committer.name,
-          email: commit.committer.email,
+          name: commit.author.name,
+          email: commit.author.email,
           is_student: true
         },
         create: {
-          name: commit.committer.name,
-          email: commit.committer.email,
+          name: commit.author.name,
+          email: commit.author.email,
           is_student: true
         }
       })
@@ -86,14 +86,14 @@ export async function POST({ request }: RequestEvent) {
         },
         update: {
           created_on: commit.timestamp,
-          email: commit.committer.email,
+          email: commit.author.email,
           repo_name: payload.repository.name,
           branch: payload.ref,
           id: commit.id
         },
         create: {
           created_on: commit.timestamp,
-          email: commit.committer.email,
+          email: commit.author.email,
           repo_name: payload.repository.name,
           branch: payload.ref,
           id: commit.id
