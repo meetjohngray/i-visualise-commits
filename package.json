@@ -8,6 +8,7 @@
     "dev:client": "vite dev",
     "dev:css": "tailwind -i ./src/input.css -o ./src/global.css --watch",
     "build": "run-s build:*",
+    "build:prisma": "prisma generate",
     "build:css": "tailwind -i ./src/input.css -o ./src/global.css",
     "build:vite": "vite build",
     "preview": "vite preview",
