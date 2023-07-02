@@ -5,10 +5,10 @@
 
 <table class="table-auto border-collapse border border-slate-500">
 	<thead>
-		<tr>
+		<tr class="bg-slate-800">
 			<th>Date/Student</th>
 			{#each studentNames as name (name)}
-				<th class="border border-slate-600">{name}</th>
+				<th class="border border-slate-600 align-top px-4 py-2">{name.split(' ')[0].split('-')[0]}</th>
 			{/each}
 		</tr>
 	</thead>

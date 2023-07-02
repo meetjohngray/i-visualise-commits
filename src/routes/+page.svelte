@@ -65,7 +65,7 @@
   })
 </script>
 
-<div class="flex flex-col gap-10 w-2/3">
+<div class="flex flex-col gap-10 w-2/3 items-center justify-center mx-auto">
   <ListStudents
     data={tableData.sort((a, b) => b.lastCommitDate - a.lastCommitDate)}
   />
