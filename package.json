@@ -43,6 +43,7 @@
   "type": "module",
   "dependencies": {
     "@prisma/client": "4.16.2",
-    "d3": "^7.8.5"
+    "d3": "^7.8.5",
+    "zod": "^3.21.4"
   }
 }
