@@ -31,6 +31,7 @@ function formatTimeAgo(date) {
     duration /= division.amount
   }
 }
+
 </script>
 	
 <table class="table-auto border-collapse border border-slate-500">

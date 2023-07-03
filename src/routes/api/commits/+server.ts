@@ -11,9 +11,6 @@ const schema = z.object({
   organization: z.object({
     login: z.string()
   }),
-  sender: z.object({
-    site_admin: z.boolean()
-  }),
   commits: z.array(
     z.object({
       id: z.string(),
@@ -48,19 +45,22 @@ export async function POST({ request }: RequestEvent) {
     const payload = result.data
 
     for (const commit of payload.commits) {
-      await prisma.student.upsert({
+      console.log({ name: commit.author.name, email: commit.author.email })
+      await prisma.email.upsert({
         where: {
           email: commit.author.email
         },
         update: {
-          name: commit.author.name,
-          email: commit.author.email,
-          is_student: true
+          name: capitalizeFirstLetter(
+            firstName(firstName(commit.author.name), '-')
+          ),
+          email: commit.author.email
         },
         create: {
-          name: commit.author.name,
-          email: commit.author.email,
-          is_student: true
+          name: capitalizeFirstLetter(
+            firstName(firstName(commit.author.name), '-')
+          ),
+          email: commit.author.email
         }
       })
     }
@@ -112,4 +112,12 @@ export async function POST({ request }: RequestEvent) {
 
     return new Response(JSON.stringify(error), { status: 500 })
   }
+}
+
+function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+function firstName(str: string, separator = ' ') {
+  return str.split(separator)[0]
 }

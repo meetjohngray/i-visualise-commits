@@ -7,32 +7,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Commit {
-  id         String   @id
-  created_on DateTime
-  email      String
-  repo_name  String
-  branch     String
-  Student    Student  @relation(fields: [email], references: [email])
-  Repo       Repo     @relation(fields: [repo_name], references: [name])
-}
-
 model Repo {
   name        String    @id @unique
   forked_date DateTime?
   Commit      Commit[]
 }
 
+model Commit {
+  id         String   @id
+  created_on DateTime
+  email      String
+  repo_name  String
+  branch     String
+  Email      Email    @relation(fields: [email], references: [email])
+  Repo       Repo     @relation(fields: [repo_name], references: [name])
+}
+
+model Email {
+  email   String   @id
+  name    String
+  Student Student? @relation(fields: [name], references: [name])
+  Commit  Commit[]
+}
+
 model Student {
-  name       String
-  email      String   @id @unique
+  name       String  @id
   is_student Boolean
-  Commit     Commit[]
+  Emails     Email[]
 }
 
 model Log {
   id         String   @id @default(uuid())
   created_on DateTime @default(now())
-
-  error String
+  error      String
 }
