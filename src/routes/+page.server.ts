@@ -3,38 +3,16 @@ const { PrismaClient } = pkg
 
 export async function load() {
   const prisma = new PrismaClient()
-  const commits = await prisma.commit.findMany({
-    select: {
-      id: true,
-      created_on: true,
-      email: true,
-      repo_name: true,
-      branch: true,
-      Email: {
-        select: {
-          name: true,
-          email: true
-        }
-      },
-      Repo: {
-        select: {
-          forked_date: true,
-          name: true
-        }
-      }
-    },
-    orderBy: {
-      created_on: 'desc'
-    }
-  })
-
   const students = await prisma.student.findMany({
-    include: {
+    select: {
+      name: true,
       Emails: {
-        include: {
+        select: {
           Commit: {
-            orderBy: {
-              created_on: 'desc'
+            select: {
+              branch: true,
+              created_on: true,
+              repo_name: true
             }
           }
         }
@@ -43,9 +21,6 @@ export async function load() {
   })
 
   return {
-    students,
-    streamed: {
-      commits
-    }
+    students
   }
 }
