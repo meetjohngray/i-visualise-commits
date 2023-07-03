@@ -6,11 +6,15 @@
   export let data
 
   const tableData = data.students.map((student) => {
-    const totalCommits = student.Commit.length
-    const lastCommitDate = student.Commit[0]?.created_on
-    const commitDates = student.Commit.map((commit) =>
-      Number(commit.created_on)
-    )
+    const totalCommits = student.Emails.map((email) => email.Commit).flat()
+      .length
+    const lastCommitDate = student.Emails.map((email) => email.Commit)
+      .flat()
+      .sort((a, b) => Number(b.created_on) - Number(a.created_on))
+      .find((id) => id)?.created_on
+    const commitDates = student.Emails.map((email) => email.Commit)
+      .flat()
+      .map((commit) => Number(commit.created_on))
     commitDates.sort((a, b) => a - b)
 
     let commitGaps = []
@@ -33,54 +37,50 @@
     }
   })
 
-
   const pivotReposStudents: { [repo: string]: { [student: string]: number } } =
     {}
 
-  data.streamed.commits.forEach((commit) => {
-    const repoName = commit.Repo.name
-    const studentName = commit.Student.name
+  // data.students.commits.forEach((commit) => {
+  //   const repoName = commit.Repo.name
+  //   const studentName = commit.Student.name
 
-    if (!(repoName in pivotReposStudents)) {
-      pivotReposStudents[repoName] = {}
-    }
-    if (!(studentName in pivotReposStudents[repoName])) {
-      pivotReposStudents[repoName][studentName] = 0
-    }
-    pivotReposStudents[repoName][studentName]++
-  })
+  //   if (!(repoName in pivotReposStudents)) {
+  //     pivotReposStudents[repoName] = {}
+  //   }
+  //   if (!(studentName in pivotReposStudents[repoName])) {
+  //     pivotReposStudents[repoName][studentName] = 0
+  //   }
+  //   pivotReposStudents[repoName][studentName]++
+  // })
 
-  const pivotDaysStudents: { [date: string]: { [student: string]: number } } =
-    {}
-  data.streamed.commits.forEach((commit) => {
-    const date = commit.created_on.toISOString().split('T')[0] // extract the date part
-    const studentName = commit.Student.name
+  // const pivotDaysStudents: { [date: string]: { [student: string]: number } } =
+  //   {}
+  // data.streamed.commits.forEach((commit) => {
+  //   const date = commit.created_on.toISOString().split('T')[0] // extract the date part
+  //   const studentName = commit.Student.name
 
-    if (!(date in pivotDaysStudents)) {
-      pivotDaysStudents[date] = {}
-    }
-    if (!(studentName in pivotDaysStudents[date])) {
-      pivotDaysStudents[date][studentName] = 0
-    }
-    pivotDaysStudents[date][studentName]++
-  })
+  //   if (!(date in pivotDaysStudents)) {
+  //     pivotDaysStudents[date] = {}
+  //   }
+  //   if (!(studentName in pivotDaysStudents[date])) {
+  //     pivotDaysStudents[date][studentName] = 0
+  //   }
+  //   pivotDaysStudents[date][studentName]++
+  // })
 </script>
 
-
-{#await data.streamed.commits}
-<p>Loadding...</p>
-{:then commits}
 <div class="flex flex-col gap-10 w-2/3 items-center justify-center mx-auto">
   <ListStudents
-    data={tableData.sort((a, b) => b.lastCommitDate - a.lastCommitDate)}
+    data={tableData.sort(
+      (a, b) => Number(b.lastCommitDate) - Number(a.lastCommitDate)
+    )}
   />
-  <PivotCommits
+  <!-- <PivotCommits
     pivotTable={pivotReposStudents}
     studentNames={[...new Set(data.students.map((s) => s.name))]}
   />
   <PivotCommits
     pivotTable={pivotDaysStudents}
     studentNames={[...new Set(data.students.map((s) => s.name))]}
-  />
+  /> -->
 </div>
-{/await}
