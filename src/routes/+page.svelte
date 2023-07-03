@@ -2,7 +2,7 @@
   import ListStudents from '../component/ListStudents.svelte'
   import PivotCommits from '../component/PivotCommits.svelte'
 
-  import { standardDeviation } from '../utils'
+  import { standardDeviation, createPivotTable } from '../utils'
   export let data
 
   const tableData = data.students.map((student) => {
@@ -37,21 +37,8 @@
     }
   })
 
-  const pivotReposStudents: { [repo: string]: { [student: string]: number } } =
-    {}
-
-  // data.students.commits.forEach((commit) => {
-  //   const repoName = commit.Repo.name
-  //   const studentName = commit.Student.name
-
-  //   if (!(repoName in pivotReposStudents)) {
-  //     pivotReposStudents[repoName] = {}
-  //   }
-  //   if (!(studentName in pivotReposStudents[repoName])) {
-  //     pivotReposStudents[repoName][studentName] = 0
-  //   }
-  //   pivotReposStudents[repoName][studentName]++
-  // })
+  let pivotReposStudents = createPivotTable(data.students, 'repo_name')
+  let pivotDaysStudents = createPivotTable(data.students, 'created_on')
 
   // const pivotDaysStudents: { [date: string]: { [student: string]: number } } =
   //   {}
@@ -75,12 +62,12 @@
       (a, b) => Number(b.lastCommitDate) - Number(a.lastCommitDate)
     )}
   />
-  <!-- <PivotCommits
+  <PivotCommits
     pivotTable={pivotReposStudents}
     studentNames={[...new Set(data.students.map((s) => s.name))]}
   />
   <PivotCommits
     pivotTable={pivotDaysStudents}
     studentNames={[...new Set(data.students.map((s) => s.name))]}
-  /> -->
+  />
 </div>
