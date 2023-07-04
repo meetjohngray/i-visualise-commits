@@ -44,26 +44,6 @@ export async function POST({ request }: RequestEvent) {
 
     const payload = result.data
 
-    for (const commit of payload.commits) {
-      await prisma.email.upsert({
-        where: {
-          email: commit.author.email
-        },
-        update: {
-          name: capitalizeFirstLetter(
-            firstName(firstName(commit.author.name), '-')
-          ),
-          email: commit.author.email
-        },
-        create: {
-          name: capitalizeFirstLetter(
-            firstName(firstName(commit.author.name), '-')
-          ),
-          email: commit.author.email
-        }
-      })
-    }
-
     await prisma.repo.upsert({
       where: {
         name: payload.repository.name
