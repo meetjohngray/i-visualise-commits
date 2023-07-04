@@ -78,8 +78,6 @@ export async function load() {
   // Convert the Map to a plain array of student objects.
   const students = Array.from(studentMap.values())
 
-  console.log(students)
-
   return {
     students
   }

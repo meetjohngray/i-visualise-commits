@@ -45,7 +45,6 @@ export async function POST({ request }: RequestEvent) {
     const payload = result.data
 
     for (const commit of payload.commits) {
-      console.log({ name: commit.author.name, email: commit.author.email })
       await prisma.email.upsert({
         where: {
           email: commit.author.email
