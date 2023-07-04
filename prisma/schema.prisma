@@ -24,14 +24,16 @@ model Commit {
 }
 
 model Email {
-  email   String   @id
-  name    String
-  Student Student? @relation(fields: [name], references: [name])
-  Commit  Commit[]
+  email     String   @id
+  github_id String
+  Student   Student? @relation(fields: [github_id], references: [github_id])
+  Commit    Commit[]
 }
 
 model Student {
   name       String  @id
+  username   String  @unique
+  github_id  String  @unique
   is_student Boolean
   Emails     Email[]
 }
