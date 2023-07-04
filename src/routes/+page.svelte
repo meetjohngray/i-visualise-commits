@@ -2,55 +2,30 @@
   import ListStudents from '../component/ListStudents.svelte'
   import PivotCommits from '../component/PivotCommits.svelte'
 
-  import { standardDeviation, createPivotTable } from '../utils'
   export let data
-
-  const tableData = data.students.map((student) => {
-    const totalCommits = student.Emails.map((email) => email.Commit).flat()
-      .length
-    const lastCommitDate = student.Emails.map((email) => email.Commit)
-      .flat()
-      .sort((a, b) => Number(b.created_on) - Number(a.created_on))
-      .find((id) => id)?.created_on
-    const commitDates = student.Emails.map((email) => email.Commit)
-      .flat()
-      .map((commit) => Number(commit.created_on))
-
-    let commitGaps = []
-    for (let i = 1; i < commitDates.length; i++) {
-      let gap = (commitDates[i] - commitDates[i - 1]) / (1000 * 60 * 60 * 24)
-      commitGaps.push(gap)
-    }
-
-    let commitCount = commitDates.length
-    let consistencyScore = standardDeviation(commitGaps)
-
-    let progressScore =
-      consistencyScore !== 0 ? commitCount / consistencyScore : commitCount
-
-    return {
-      name: student.name,
-      totalCommits,
-      lastCommitDate,
-      progressScore
-    }
-  })
-
-  let pivotReposStudents = createPivotTable(data.students, 'repo_name')
-  let pivotDaysStudents = createPivotTable(data.students, 'created_on')
-
- </script>
+</script>
 
 <div class="flex flex-col gap-10 w-2/3 items-center justify-center mx-auto">
-  <ListStudents
-    data={tableData}
-  />
-  <PivotCommits
-    pivotTable={pivotReposStudents}
-    studentNames={[...new Set(data.students.map((s) => s.name))]}
-  />
-  <PivotCommits
-    pivotTable={pivotDaysStudents}
-    studentNames={[...new Set(data.students.map((s) => s.name))]}
-  />
+  {#await data.streamed.studentSummary}
+    Loading...
+  {:then value}
+    <ListStudents data={value} />
+  {:catch error}
+    {error.message}
+  {/await}
+  {#await data.streamed.pivotReposStudents}
+    Loading...
+  {:then value}
+    <PivotCommits pivotTable={value} studentNames={data.uniqueNames} />
+  {:catch error}
+    {error.message}
+  {/await}
+
+  {#await data.streamed.pivotDaysStudents}
+    Loading...
+  {:then value}
+    <PivotCommits pivotTable={value} studentNames={data.uniqueNames} />
+  {:catch error}
+    {error.message}
+  {/await}
 </div>

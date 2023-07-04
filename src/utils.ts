@@ -1,6 +1,9 @@
+import type { getCommits } from '../prisma/db'
+import type { StudentData } from './routes/+page.server'
+
 export function standardDeviation(values: number[]) {
   const avg = average(values)
-  const squareDiffs = values.map(function (value) {
+  const squareDiffs = values.map(function(value) {
     const diff = value - avg
     const sqrDiff = diff * diff
     return sqrDiff
@@ -17,24 +20,9 @@ function average(data: number[]) {
   return avg
 }
 
-interface Commit {
-  branch: string
-  created_on: string
-  repo_name: string
-}
-
-interface Email {
-  Commit: Commit[]
-}
-
-interface Student {
-  name: string
-  Emails: Email[]
-}
-
 type PivotOn = 'repo_name' | 'created_on'
 
-export function createPivotTable(students: Student[], pivotOn: PivotOn) {
+export function createPivotTable(students: StudentData[], pivotOn: PivotOn) {
   const pivotTable: { [key: string]: { [key: string]: number } } = {}
 
   students.forEach((student) => {
@@ -59,4 +47,57 @@ export function createPivotTable(students: Student[], pivotOn: PivotOn) {
   })
 
   return pivotTable
+}
+
+export function flip(commits: Awaited<ReturnType<typeof getCommits>>) {
+  const studentMap = new Map<string, StudentData>()
+
+  commits.forEach((commit) => {
+    if (!commit.Email.Student) return
+    const studentName = commit.Email.Student.name
+    const email = commit.Email.email
+    const student = studentMap.get(studentName)
+
+    if (student) {
+      const emailObj = student.Emails.find((e) => e.email === email)
+
+      if (emailObj) {
+        emailObj.Commit.push({
+          branch: commit.branch,
+          created_on: commit.created_on,
+          repo_name: commit.repo_name
+        })
+      } else {
+        student.Emails.push({
+          email: email,
+          Commit: [
+            {
+              branch: commit.branch,
+              created_on: commit.created_on,
+              repo_name: commit.repo_name
+            }
+          ]
+        })
+      }
+    } else {
+      studentMap.set(studentName, {
+        name: studentName,
+        Emails: [
+          {
+            email: email,
+            Commit: [
+              {
+                branch: commit.branch,
+                created_on: commit.created_on,
+                repo_name: commit.repo_name
+              }
+            ]
+          }
+        ]
+      })
+    }
+  })
+
+  const students = Array.from(studentMap.values())
+  return students
 }

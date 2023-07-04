@@ -1,84 +1,75 @@
 import pkg from '@prisma/client'
+
+import * as db from '../../prisma/db'
+import { createPivotTable, flip, standardDeviation } from '../utils'
 const { PrismaClient } = pkg
+
+interface CommitData {
+  branch: string
+  created_on: Date
+  repo_name: string
+}
+
+interface EmailData {
+  email: string
+  Commit: CommitData[]
+}
+
+export interface StudentData {
+  name: string
+  Emails: EmailData[]
+}
 
 export async function load() {
   const prisma = new PrismaClient()
+  const commits = await db.getCommits(prisma)
 
-  const commits = await prisma.commit.findMany({
-    select: {
-      branch: true,
-      created_on: true,
-      repo_name: true,
-      Email: {
-        select: {
-          email: true,
-          Student: {
-            select: {
-              name: true
-            }
-          }
-        }
-      }
-    },
-    orderBy: {
-      created_on: 'desc'
-    }
-  })
+  const students = flip(commits)
 
-  const studentMap = new Map<string, any>()
-
-  commits.forEach((commit) => {
-    if (!commit.Email.Student) {
-      return
-    }
-    const studentName = commit.Email.Student.name
-    const email = commit.Email.email
-    const student = studentMap.get(studentName)
-
-    if (student) {
-      const emailObj = student.Emails.find((e: any) => e.email === email)
-
-      if (emailObj) {
-        emailObj.Commit.push({
-          branch: commit.branch,
-          created_on: commit.created_on,
-          repo_name: commit.repo_name
-        })
-      } else {
-        student.Emails.push({
-          email: email,
-          Commit: [
-            {
-              branch: commit.branch,
-              created_on: commit.created_on,
-              repo_name: commit.repo_name
-            }
-          ]
-        })
-      }
-    } else {
-      studentMap.set(studentName, {
-        name: studentName,
-        Emails: [
-          {
-            email: email,
-            Commit: [
-              {
-                branch: commit.branch,
-                created_on: commit.created_on,
-                repo_name: commit.repo_name
-              }
-            ]
-          }
-        ]
-      })
-    }
-  })
-
-  // Convert the Map to a plain array of student objects.
-  const students = Array.from(studentMap.values())
+  const studentSummary = getStudentSummary(students)
+  let pivotReposStudents = createPivotTable(students, 'repo_name')
+  let pivotDaysStudents = createPivotTable(students, 'created_on')
+  const uniqueNames = students.map((student) => student.name)
 
   return {
-    students
+    uniqueNames,
+    streamed: {
+      studentSummary,
+      pivotReposStudents,
+      pivotDaysStudents
+    }
   }
+}
+
+function getStudentSummary(students: StudentData[]) {
+  return students.map((student) => {
+    const totalCommits = student.Emails.map((email) => email.Commit).flat()
+      .length
+    const lastCommitDate = student.Emails.map((email) => email.Commit)
+      .flat()
+      .sort((a, b) => Number(b.created_on) - Number(a.created_on))
+      .find((id) => id)?.created_on
+    const commitDates = student.Emails.map((email) => email.Commit)
+      .flat()
+      .map((commit) => Number(commit.created_on))
+
+    let commitGaps = []
+    for (let i = 1; i < commitDates.length; i++) {
+      let gap = (commitDates[i] - commitDates[i - 1]) / (1000 * 60 * 60 * 24)
+      commitGaps.push(gap)
+    }
+
+    let commitCount = commitDates.length
+    let consistencyScore = standardDeviation(commitGaps)
+
+    let progressScore =
+      consistencyScore !== 0 ? commitCount / consistencyScore : commitCount
+
+    return {
+      name: student.name,
+      totalCommits,
+      lastCommitDate,
+      progressScore
+    }
+  })
 }
