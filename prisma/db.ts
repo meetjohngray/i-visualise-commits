@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import type { PrismaClient } from '@prisma/client'
 
 export async function getCommits(prisma: PrismaClient) {
   const commits = await prisma.commit.findMany({
