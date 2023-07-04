@@ -15,7 +15,6 @@
     const commitDates = student.Emails.map((email) => email.Commit)
       .flat()
       .map((commit) => Number(commit.created_on))
-    commitDates.sort((a, b) => a - b)
 
     let commitGaps = []
     for (let i = 1; i < commitDates.length; i++) {
@@ -40,27 +39,11 @@
   let pivotReposStudents = createPivotTable(data.students, 'repo_name')
   let pivotDaysStudents = createPivotTable(data.students, 'created_on')
 
-  // const pivotDaysStudents: { [date: string]: { [student: string]: number } } =
-  //   {}
-  // data.streamed.commits.forEach((commit) => {
-  //   const date = commit.created_on.toISOString().split('T')[0] // extract the date part
-  //   const studentName = commit.Student.name
-
-  //   if (!(date in pivotDaysStudents)) {
-  //     pivotDaysStudents[date] = {}
-  //   }
-  //   if (!(studentName in pivotDaysStudents[date])) {
-  //     pivotDaysStudents[date][studentName] = 0
-  //   }
-  //   pivotDaysStudents[date][studentName]++
-  // })
-</script>
+ </script>
 
 <div class="flex flex-col gap-10 w-2/3 items-center justify-center mx-auto">
   <ListStudents
-    data={tableData.sort(
-      (a, b) => Number(b.lastCommitDate) - Number(a.lastCommitDate)
-    )}
+    data={tableData}
   />
   <PivotCommits
     pivotTable={pivotReposStudents}
