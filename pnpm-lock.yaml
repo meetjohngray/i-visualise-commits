@@ -1,7 +1,7 @@
 lockfileVersion: '6.1'
 
 settings:
-  autoInstallPeers: false
+  autoInstallPeers: true
   excludeLinksFromLockfile: false
 
 dependencies:
@@ -34,6 +34,9 @@ devDependencies:
   '@types/d3':
     specifier: ^7.4.0
     version: 7.4.0
+  '@types/node':
+    specifier: ^20.3.3
+    version: 20.3.3
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.45.0
     version: 5.60.1(@typescript-eslint/parser@5.60.1)(eslint@8.44.0)(typescript@5.1.6)
