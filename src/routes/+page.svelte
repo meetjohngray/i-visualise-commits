@@ -5,6 +5,14 @@
   export let data
 </script>
 
+<svelte:head>
+  <title>Cohort Analytics</title>
+  <meta
+    name="description"
+    content="This is where the description goes for SEO"
+  />
+</svelte:head>
+
 <div class="flex flex-col gap-10 w-fit items-center justify-center mx-auto">
   {#await data.streamed.studentSummary}
     Loading...
