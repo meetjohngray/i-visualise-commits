@@ -36,8 +36,9 @@
 <table class="table-auto border-collapse border border-slate-500">
   <thead>
     <tr class="bg-slate-800">
-      <th class="p-4">Name</th>
-      <th class="p-4">Total Commits</th>
+      <th class="p-4">Commit Date</th>
+      <th class="p-4">Student</th>
+      <th class="p-4"># Commits so far</th>
       <th class="p-4">
         <p>
           Progress Score
@@ -47,14 +48,22 @@
           </span>
         </p>
       </th>
-      <th class="p-4">Last Repo</th>
-      <th class="p-4">Last Commit Date</th>
+      <th class="p-4">Challenge/Repo</th>
     </tr>
   </thead>
   <tbody>
     {#each data as student}
       <tr>
-        <td class="text-left pl-4">{student.name}</td>
+        <td
+          class="text-right pr-4"
+          title={mediumTime.format(student.lastCommitDate)}
+          >{student.lastCommitDate
+            ? formatTimeAgo(student.lastCommitDate)
+            : ''}</td
+        >
+        <td class="text-left pl-4">
+          <a href={`${student.username}`}>{student.name}</a>
+        </td>
         <td class="text-right">
           <span>{student.totalCommits}</span>
         </td>
@@ -65,17 +74,9 @@
               : student.progressScore.toFixed(0)}</span
           >
         </td>
-        <td class="text-left pr-4" >
+        <td class="text-left pr-4">
           {student.lastRepo}
         </td>
-        <td
-          class="text-right pr-4"
-          title={mediumTime.format(student.lastCommitDate)}
-          >{student.lastCommitDate
-            ? formatTimeAgo(student.lastCommitDate)
-            : ''}</td
-        >
-          
       </tr>
     {/each}
   </tbody>
