@@ -91,11 +91,3 @@ export async function POST({ request }: RequestEvent) {
     return new Response(JSON.stringify(error), { status: 500 })
   }
 }
-
-function capitalizeFirstLetter(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
-
-function firstName(str: string, separator = ' ') {
-  return str.split(separator)[0]
-}
