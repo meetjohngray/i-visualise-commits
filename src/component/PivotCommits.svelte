@@ -8,7 +8,7 @@
 		<tr class="bg-slate-800">
 			<th>Date/Student</th>
 			{#each studentNames as name (name)}
-				<th class="border border-slate-600 align-top px-4 py-2">{name.split(' ')[0].split('-')[0]}</th>
+				<th class="border border-slate-600 align-top px-4 py-2">{name}</th>
 			{/each}
 		</tr>
 	</thead>

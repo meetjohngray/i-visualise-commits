@@ -5,19 +5,17 @@ import { createPivotTable, flip, standardDeviation } from '../utils'
 const { PrismaClient } = pkg
 
 interface CommitData {
+  username: string
   branch: string
   created_on: Date
   repo_name: string
 }
 
-interface EmailData {
-  email: string
-  Commit: CommitData[]
-}
-
 export interface StudentData {
   name: string
-  Emails: EmailData[]
+  github_id: number
+  username: string
+  Commits: CommitData[]
 }
 
 export async function load() {
@@ -43,15 +41,13 @@ export async function load() {
 
 function getStudentSummary(students: StudentData[]) {
   return students.map((student) => {
-    const totalCommits = student.Emails.map((email) => email.Commit).flat()
-      .length
-    const lastCommitDate = student.Emails.map((email) => email.Commit)
-      .flat()
-      .sort((a, b) => Number(b.created_on) - Number(a.created_on))
-      .find((id) => id)?.created_on
-    const commitDates = student.Emails.map((email) => email.Commit)
-      .flat()
-      .map((commit) => Number(commit.created_on))
+    const totalCommits = student.Commits.length
+    const lastCommitDate = student.Commits.sort(
+      (a, b) => Number(b.created_on) - Number(a.created_on)
+    ).find((id) => id)?.created_on
+    const commitDates = student.Commits.flat().map((commit) =>
+      Number(commit.created_on)
+    )
 
     let commitGaps = []
     for (let i = 1; i < commitDates.length; i++) {
