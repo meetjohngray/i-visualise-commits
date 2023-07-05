@@ -10,7 +10,7 @@ CREATE TABLE "Repo" (
 CREATE TABLE "Commit" (
     "id" TEXT NOT NULL,
     "created_on" TIMESTAMP(3) NOT NULL,
-    "email" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
     "repo_name" TEXT NOT NULL,
     "branch" TEXT NOT NULL,
 
@@ -18,17 +18,10 @@ CREATE TABLE "Commit" (
 );
 
 -- CreateTable
-CREATE TABLE "Email" (
-    "email" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "Email_pkey" PRIMARY KEY ("email")
-);
-
--- CreateTable
 CREATE TABLE "Student" (
     "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "github_id" INTEGER NOT NULL,
     "is_student" BOOLEAN NOT NULL,
 
     CONSTRAINT "Student_pkey" PRIMARY KEY ("name")
@@ -47,16 +40,13 @@ CREATE TABLE "Log" (
 CREATE UNIQUE INDEX "Repo_name_key" ON "Repo"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Email_email_key" ON "Email"("email");
+CREATE UNIQUE INDEX "Student_username_key" ON "Student"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Student_email_key" ON "Student"("email");
+CREATE UNIQUE INDEX "Student_github_id_key" ON "Student"("github_id");
 
 -- AddForeignKey
-ALTER TABLE "Commit" ADD CONSTRAINT "Commit_email_fkey" FOREIGN KEY ("email") REFERENCES "Student"("email") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Commit" ADD CONSTRAINT "Commit_username_fkey" FOREIGN KEY ("username") REFERENCES "Student"("username") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Commit" ADD CONSTRAINT "Commit_repo_name_fkey" FOREIGN KEY ("repo_name") REFERENCES "Repo"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Email" ADD CONSTRAINT "Email_email_fkey" FOREIGN KEY ("email") REFERENCES "Student"("email") ON DELETE RESTRICT ON UPDATE CASCADE;
