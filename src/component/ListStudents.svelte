@@ -34,7 +34,6 @@
 </script>
 
 <table class="table-auto border-collapse border border-slate-500">
-  <caption>A list of all students in the cohort</caption>
   <thead>
     <tr class="bg-slate-800">
       <th class="p-4">Name</th>
@@ -55,7 +54,7 @@
   <tbody>
     {#each data as student}
       <tr>
-        <td class="text-right pl-4">{student.name}</td>
+        <td class="text-left pl-4">{student.name}</td>
         <td class="text-right">
           <span>{student.totalCommits}</span>
         </td>
@@ -66,7 +65,7 @@
               : student.progressScore.toFixed(0)}</span
           >
         </td>
-        <td class="text-right pr-4" >
+        <td class="text-left pr-4" >
           {student.lastRepo}
         </td>
         <td
