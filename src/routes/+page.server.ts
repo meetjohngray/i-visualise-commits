@@ -63,6 +63,7 @@ function getStudentSummary(students: StudentData[]) {
 
     return {
       name: student.name,
+      username: student.username,
       totalCommits,
       lastCommitDate: lastCommit?.created_on,
       progressScore,

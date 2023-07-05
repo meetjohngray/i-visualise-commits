@@ -84,3 +84,9 @@ export function flip(commits: Awaited<ReturnType<typeof getCommits>>) {
 
   return students
 }
+
+export function getLastSegment(url: string) {
+  var segments = url.split('/')
+  var lastSegment = segments[segments.length - 1]
+  return lastSegment
+}
