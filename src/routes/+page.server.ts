@@ -42,9 +42,9 @@ export async function load() {
 function getStudentSummary(students: StudentData[]) {
   return students.map((student) => {
     const totalCommits = student.Commits.length
-    const lastCommitDate = student.Commits.sort(
+    const lastCommit = student.Commits.sort(
       (a, b) => Number(b.created_on) - Number(a.created_on)
-    ).find((id) => id)?.created_on
+    ).find((id) => id)
     const commitDates = student.Commits.flat().map((commit) =>
       Number(commit.created_on)
     )
@@ -64,8 +64,9 @@ function getStudentSummary(students: StudentData[]) {
     return {
       name: student.name,
       totalCommits,
-      lastCommitDate,
-      progressScore
+      lastCommitDate: lastCommit?.created_on,
+      progressScore,
+      lastRepo: lastCommit?.repo_name
     }
   })
 }

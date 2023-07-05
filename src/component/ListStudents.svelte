@@ -39,7 +39,16 @@
     <tr class="bg-slate-800">
       <th class="p-4">Name</th>
       <th class="p-4">Total Commits</th>
-      <th class="p-4">Progress Score</th>
+      <th class="p-4">
+        <p>
+          Progress Score
+          <br />
+          <span class="text-xs text-gray-500">
+            (# commits / Std of commits)
+          </span>
+        </p>
+      </th>
+      <th class="p-4">Last Repo</th>
       <th class="p-4">Last Commit Date</th>
     </tr>
   </thead>
@@ -57,6 +66,9 @@
               : student.progressScore.toFixed(0)}</span
           >
         </td>
+        <td class="text-right pr-4" >
+          {student.lastRepo}
+        </td>
         <td
           class="text-right pr-4"
           title={mediumTime.format(student.lastCommitDate)}
@@ -64,6 +76,7 @@
             ? formatTimeAgo(student.lastCommitDate)
             : ''}</td
         >
+          
       </tr>
     {/each}
   </tbody>
