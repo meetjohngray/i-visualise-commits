@@ -16,26 +16,19 @@ model Repo {
 model Commit {
   id         String   @id
   created_on DateTime
-  email      String
+  username   String
   repo_name  String
   branch     String
-  Email      Email    @relation(fields: [email], references: [email])
+  Student    Student  @relation(fields: [username], references: [username])
   Repo       Repo     @relation(fields: [repo_name], references: [name])
 }
 
-model Email {
-  email     String   @id
-  github_id String
-  Student   Student? @relation(fields: [github_id], references: [github_id])
-  Commit    Commit[]
-}
-
 model Student {
-  name       String  @id
-  username   String  @unique
-  github_id  String  @unique
+  name       String   @id
+  username   String   @unique
+  github_id  Int      @unique
   is_student Boolean
-  Emails     Email[]
+  Commits    Commit[]
 }
 
 model Log {
