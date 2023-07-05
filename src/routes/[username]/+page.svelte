@@ -11,6 +11,7 @@
   />
 </svelte:head>
 
+<a href="/">Home</a>
 <div class="flex flex-col justify-center items-center gap-6">
   <h1 class="text-3xl font-bold">{data.commits[0].Student.name}</h1>
   <table class="table-auto border-collapse border border-slate-500">

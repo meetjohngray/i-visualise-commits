@@ -62,7 +62,9 @@
             : ''}</td
         >
         <td class="text-left pl-4">
-          <a href={`${student.username}`}>{student.name}</a>
+          <a class="text-blue-500" href={`${student.username}`}
+            >{student.name}</a
+          >
         </td>
         <td class="text-right">
           <span>{student.totalCommits}</span>
