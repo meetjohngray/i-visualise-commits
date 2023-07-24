@@ -17,7 +17,8 @@ const schema = z.object({
       timestamp: z.string(),
       author: z.object({
         name: z.string(),
-        username: z.string()
+        username: z.string(),
+        email: z.string()
       })
     })
   )
@@ -63,14 +64,14 @@ export async function POST({ request }: RequestEvent) {
           id: commit.id
         },
         update: {
-          username: commit.author.username,
+          username: commit.author.username || commit.author.email,
           created_on: commit.timestamp,
           repo_name: payload.repository.name,
           branch: payload.ref,
           id: commit.id
         },
         create: {
-          username: commit.author.username,
+          username: commit.author.username || commit.author.email,
           created_on: commit.timestamp,
           repo_name: payload.repository.name,
           branch: payload.ref,
