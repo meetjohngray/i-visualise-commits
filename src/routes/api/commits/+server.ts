@@ -17,7 +17,7 @@ const schema = z.object({
       timestamp: z.string(),
       author: z.object({
         name: z.string(),
-        username: z.string(),
+        username: z.string().optional(),
         email: z.string()
       })
     })
