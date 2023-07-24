@@ -89,6 +89,11 @@ export async function getCommits(prisma: PrismaClient) {
         }
       }
     },
+    where: {
+      Student: {
+        is_student: true
+      }
+    },
     orderBy: {
       created_on: 'desc'
     }
