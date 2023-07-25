@@ -27,7 +27,7 @@ export async function load() {
   const studentSummary = getStudentSummary(students)
   let pivotReposStudents = createPivotTable(students, 'repo_name')
   let pivotDaysStudents = createPivotTable(students, 'created_on')
-  const uniqueNames = students.map((student) => student.name)
+  const uniqueNames = students.map((student) => student.name).sort()
 
   return {
     uniqueNames,
