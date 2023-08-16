@@ -9,7 +9,7 @@ This app has three main components:
 
 ## Setting up the environment
 
-This app is intended to be live all the time, since github will constantly trigger the Webhook to your API route. So it's recommended to deploy the app to a hosting service.
+This app is intended to be live all the time, since github will constantly trigger the Webhook to your API route. So it's recommended to deploy the app to a hosting service. Railway works good for this.
 
 ### .env
 
@@ -21,7 +21,23 @@ This app is intended to be live all the time, since github will constantly trigg
 npm i
 npm run dev
 ```
+- Pick a custom domain for the Cohort in Railway
+- Set Up Web Hooks in cohort GitHub org using that custom domain
+- Run script: this sets up the web hook to fire whenever someone in the org makes a push
 
+`npx ts-node --esm src/script.ts`
+
+The results will look something like this...
+```
+(node:76991) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{ data: { organization: { membersWithRole: [Object] } } }
+👥 26 members found
+🗑  Deleted all data
+👋 AhmedAnwarHafez 7552088 ()
+👋 meetjohngray 7808672 ()
+etc...
+```
 ## TODO Tasks
 
 - Use @tanstack/table to add more interactivity (clicking columns to sort)
